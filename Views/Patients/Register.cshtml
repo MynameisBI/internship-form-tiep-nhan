@@ -1,0 +1,163 @@
+﻿@model Internship.Models.Patient
+
+@{
+    ViewBag.Title = "Đăng Kí Bệnh Nhân";
+	var cities = ViewBag.Cities;
+}
+
+<h2>Đăng Kí Bệnh Nhân</h2>
+
+<form asp-action="Register" method="post">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label class="control-label" for="PhoneNumber">Số điện thoại</label>
+            <input class="form-control" type="text" name="PhoneNumber" placeholder="0909000000" required asp-for="PhoneNumber" />
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label" for="Name">Họ tên</label>
+            <input class="form-control" type="text" name="Name" placeholder="Nguyễn Văn A" required asp-for="Name" />
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label ">Ngày sinh</label>
+            <input class="form-control" autocomplete="off" type="date" name="DateOfBirth"
+                    pattern="\d{1,2}/\d{1,2}/\d{4}" placeholder="Ngày/Tháng/Năm" required asp-for="DateOfBirth">
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Email</label>
+            <input class="form-control" type="text" name="Email" placeholder="Email" asp-for="Email"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label class="control-label ">Tỉnh/TP</label>
+            <select class="form-select" name="CityId" id="selectCity" title="Vui lòng chọn" required asp-for="CityId">
+                <option selected>Vui lòng chọn</option>
+                @foreach (var city in cities)
+                {
+                    <option value="@city.CityId">@city.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Quận/Huyện</label>
+            <select name="DistrictId" id="selectDistrict" class="form-select" title="Vui lòng chọn" required asp-for="DistrictId">
+                <option value=""></option>
+            </select>
+            <script>
+                $(document).ready(function () {
+                    $('#selectCity').on('change', function () {
+                        var cityId = $(this).val();
+                        $('#selectDistrict').empty().append('<option>Đang tải...</option>');
+
+                        if (cityId) {
+                            $.getJSON('/Home/GetDistricts', { cityId: cityId }, function (data) {
+                                $('#selectDistrict').empty().append('<option value="">Vui lòng chọn</option>');
+                                $.each(data, function (i, district) {
+                                    $('#selectDistrict').append($('<option>', {
+                                        value: district.districtId,
+                                        text: district.name
+                                    }));
+                                });
+                            });
+                        } else {
+                            $('#selectDistrict').empty().append('<option value="">Vui lòng chọn</option>');
+                        }
+                    });
+                });
+            </script>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label ">Phường/Xã</label>
+            <select name="WardId" id="selectWard" class="form-select" title="Vui lòng chọn" required asp-for="WardId">
+                <option value=""></option>
+            </select>
+            <script>
+                $(document).ready(function () {
+                    $('#selectDistrict').on('change', function () {
+                        var districtId = $(this).val();
+                        $('#selectWard').empty().append('<option>Đang tải...</option>');
+
+                        if (districtId) {
+                            $.getJSON('/Home/GetWards', { districtId: districtId }, function (data) {
+                                $('#selectWard').empty().append('<option value="">Vui lòng chọn</option>');
+                                $.each(data, function (i, ward) {
+                                    $('#selectWard').append($('<option>', {
+                                        value: ward.wardId,
+                                        text: ward.name
+                                    }));
+                                });
+                            });
+                        } else {
+                            $('#selectWard').empty().append('<option value="">Vui lòng chọn</option>');
+                        }
+                    });
+                });
+            </script>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Số nhà/Đường</label>
+            <input class="form-control" type="text" name="NumberAndRoad" asp-for="NumberAndRoad"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label class="control-label ">Giới tính</label>
+            <select class="form-select" id="selectGender" name="IsMale" title="Vui lòng chọn" asp-for="IsMale">
+                <option value="true" selected>Nam</option>
+                <option value="false">Nữ</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Quốc tịch</label>
+            <select class="form-select" name="Nationality" id="selectNationality" title="Vui lòng chọn"
+                    data-size="8" asp-for="Nationality"></select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label ">Dân tộc</label>
+            <select class="form-select" name="Ethnicity" id="selectEthnicity" title="Vui lòng chọn"
+                    data-size="8" asp-for="Ethnicity"></select>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Nghề nghiệp</label>
+            <select class="form-select" name="Profession" id="selectProfession" title="Vui lòng chọn"
+                    data-size="8" asp-for="Profession"></select>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $.getJSON('/Home/GetNationalities', {}, function (data) {
+                    $('#selectNationality').empty().append('<option value="">Vui lòng chọn</option>');
+                    $.each(data, function (i, nationality) {
+                        $('#selectNationality').append($('<option>', {
+                            value: nationality.nationalityId,
+                            text: nationality.name
+                        }));
+                    });
+                });
+                $.getJSON('/Home/GetEthnicities', {}, function (data) {
+                    $('#selectEthnicity').empty().append('<option value="">Vui lòng chọn</option>');
+                    $.each(data, function (i, ethnicity) {
+                        $('#selectEthnicity').append($('<option>', {
+                            value: ethnicity.ethnicityId,
+                            text: ethnicity.name
+                        }));
+                    });
+                });
+
+                $.getJSON('/Home/GetProfessions', {}, function (data) {
+                    $('#selectProfession').empty().append('<option value="">Vui lòng chọn</option>');
+                    $.each(data, function (i, profession) {
+                        $('#selectProfession').append($('<option>', {
+                            value: profession.professionId,
+                            text: profession.name
+                        }));
+                    });
+                });
+            })
+        </script>
+    </div>
+
+	<button type="submit" class="btn btn-primary">Đăng Kí</button>
+</form>
+

@@ -1,0 +1,32 @@
+﻿@model List<Internship.Models.Patient>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Index</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+			<th>PatientId</th>
+            <th>PhoneNumber</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var patient in Model)
+        {
+            <tr>
+                <td>@patient.PatientId</td>
+                <td>@patient.PhoneNumber</td>
+                <td>@patient.Name</td>
+                @* <td> *@
+                @*     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> *@
+                @*     <a asp-action="delete" asp-route-id="@item.Id">delete</a> *@
+                @* </td> *@
+            </tr>
+        }
+
+    </tbody>
+
+</table>
