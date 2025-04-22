@@ -11,6 +11,12 @@
 			<th>PatientId</th>
             <th>PhoneNumber</th>
             <th>Name</th>
+            <th>DOB</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>District</th>
+            <th>Ward</th>
+            <th>IsMale</th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +26,12 @@
                 <td>@patient.PatientId</td>
                 <td>@patient.PhoneNumber</td>
                 <td>@patient.Name</td>
+                <td>@patient.DateOfBirth</td>
+                <td>@patient.Email</td>
+                <td>@patient.CityId</td>
+                <td>@patient.DistrictId</td>
+                <td>@patient.WardId</td>
+                <td>@patient.IsMale</td>
                 @* <td> *@
                 @*     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> *@
                 @*     <a asp-action="delete" asp-route-id="@item.Id">delete</a> *@

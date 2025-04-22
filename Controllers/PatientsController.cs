@@ -1,6 +1,7 @@
 ﻿using Internship.Data;
 using Internship.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -30,24 +31,23 @@ namespace Internship.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([Bind("PatientId", "PhoneNumber", "Name")] Patient patient)
+        public async Task<IActionResult> Register([Bind("PatientId",
+                "PhoneNumber", "Name", "DateOfBirth", "Email",
+                "CityId", "DistrictId", "WardId", "NumberAndRoad",
+                "IsMale", "NationalityId", "EthnicityId", "ProfessionId")] Patient patient)
         {
-            patient.DateOfBirth = DateOnly.FromDateTime(DateTime.Now);
-            patient.Email = "hallo@hallo.com";
-            patient.CityId = 1;
-            patient.DistrictId = 1;
-            patient.WardId = 1;
-            patient.NumberAndRoad = "123 Main St";
-            patient.IsMale = true;
-            patient.NationalityId = 1;
-            patient.EthnicityId = 1;
-            patient.ProfessionId = 1;
+            //patient.City = await _context.Cities.FindAsync(patient.CityId) ?? null!;
+            //patient.District = await _context.Districts.FindAsync(patient.DistrictId) ?? null!;
+            //patient.Ward = await _context.Wards.FindAsync(patient.WardId) ?? null!;
+
             if (ModelState.IsValid)
             {
+                patient.PatientId = _context.Patients.Max(p => p.PatientId) + 1;
                 _context.Add(patient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewBag.Cities = _context.Cities.ToList();
             return View(patient);
         }
     }
