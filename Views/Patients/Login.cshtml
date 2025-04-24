@@ -1,0 +1,26 @@
+﻿@model Internship.Models.Patient
+
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <h2 class="text-center">Đăng nhập</h2>
+        <form asp-action="Login" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="PhoneNumber" class="form-label">Số Điện Thoại</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+    </div>
+    <div class="text-center mt-3">
+        <p>Chưa đăng kí thông tin bệnh nhân? <a href="/Patients/Register">Đăng kí</a></p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,4 +1,5 @@
 using Internship.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HospitalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthentication("LoginAuth")
+    .AddCookie("LoginAuth", options =>
+    {
+        options.LoginPath = "/Patients/Login";
+    });
+
 
 
 var app = builder.Build();
@@ -24,6 +31,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity != null )
+    {
+        if (context.User.Identity.IsAuthenticated)
+        {
+            await context.SignOutAsync("LoginAuth");
+        }   
+    }
+    await next();
+});
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
