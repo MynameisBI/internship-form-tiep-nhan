@@ -33,12 +33,12 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-12 mt-12 mt-lg-0 d-flex align-items-stretch">
-                                <form asp-action="RegisterAppointment" method="post" enctype="multipart/form-data" class="php-email-form">
+                                <form asp-action="Index" method="post" enctype="multipart/form-data" class="php-email-form">
                                     <div class="row">
                                         <div class="form-group col-md-3">
                                             <label >Mã Hồ Sơ (nếu có)</label>
                                             <input id="MaHoSo" name="AppointmentId" type="text"
-                                                    class="form-control input-uppercase" placeholder="CH210000000" maxlength="11" required
+                                                    class="form-control input-uppercase" placeholder="CH210000000" maxlength="11"
                                                     asp-for="AppointmentId"/>
                                         </div>
                                         <div class="form-group col-md-3">
@@ -79,7 +79,7 @@
                                         </script>
                                     </div>
                                     <div class="text-center d-flex align-content-center justify-content-center flex-wrap">
-                                        <button type="submit" id="submit" class="m-1">Hoàn thành</button>
+                                        <button type="submit" class="btn btn-primary m-1">Đăng Kí</button>
                                         <button type="button" class="btn btn-secondary btnCancel m-1" id="btnCancel">Làm mới</button>
                                     </div>
                                 </form>

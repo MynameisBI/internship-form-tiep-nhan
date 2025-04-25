@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 
 namespace Internship.Controllers
 {
@@ -39,13 +40,9 @@ namespace Internship.Controllers
                 "CityId", "DistrictId", "WardId", "NumberAndRoad",
                 "IsMale", "NationalityId", "EthnicityId", "ProfessionId")] Patient patient)
         {
-            //patient.City = await _context.Cities.FindAsync(patient.CityId) ?? null!;
-            //patient.District = await _context.Districts.FindAsync(patient.DistrictId) ?? null!;
-            //patient.Ward = await _context.Wards.FindAsync(patient.WardId) ?? null!;
-
             if (ModelState.IsValid)
             {
-                patient.PatientId = _context.Patients.Max(p => p.PatientId) + 1;
+                patient.PatientId = (_context.Patients.Any() ? _context.Patients.Max(p => p.PatientId) : 0) + 1;
                 _context.Add(patient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

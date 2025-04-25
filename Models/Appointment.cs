@@ -11,7 +11,7 @@ public partial class Appointment
 {
     [Key]
     [Column("appointment_id")]
-    public int AppointmentId { get; set; }
+    public int? AppointmentId { get; set; }
 
     [Column("patient_id")]
     public int PatientId { get; set; }
@@ -24,13 +24,13 @@ public partial class Appointment
 
     [ForeignKey("AppointmentTime")]
     [InverseProperty("Appointments")]
-    public virtual LuAppointmentTime AppointmentTimeNavigation { get; set; } = null!;
+    public virtual LuAppointmentTime? AppointmentTimeNavigation { get; set; }
 
     [ForeignKey("ClinicId")]
     [InverseProperty("Appointments")]
-    public virtual Clinic Clinic { get; set; } = null!;
+    public virtual Clinic? Clinic { get; set; }
 
     [ForeignKey("PatientId")]
     [InverseProperty("Appointments")]
-    public virtual Patient Patient { get; set; } = null!;
+    public virtual Patient? Patient { get; set; }
 }

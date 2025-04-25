@@ -27,14 +27,14 @@ namespace Internship.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterAppointment([Bind("AppointmentId",
-                "ClinicId", "AppointmentTimeId", "Date")] Appointment appointment)
+        public async Task<IActionResult> Index([Bind("AppointmentId",
+                "ClinicId", "AppointmentTime")] Appointment appointment)
         {
-            //appointment.PatientId 
+            appointment.PatientId = int.Parse(User.FindFirst("PatientId")?.Value);
 
             if (ModelState.IsValid)
             {
-                appointment.AppointmentId = _context.Appointments.Max(a => a.AppointmentId) + 1;
+                appointment.AppointmentId = (_context.Appointments.Any() ? _context.Appointments.Max(a => a.AppointmentId) : 0) + 1;
                 _context.Add(appointment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
