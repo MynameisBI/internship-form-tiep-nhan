@@ -21,9 +21,25 @@ namespace Internship.Controllers
 
         public IActionResult Index()
         {
-            var cities = _context.Cities.ToList();
+            //var cities = _context.Cities.ToList();
             //ViewBag.Cities = new SelectList(cities, "CityId", "Name");
-            return View(cities);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAppointment([Bind("AppointmentId",
+                "ClinicId", "AppointmentTimeId", "Date")] Appointment appointment)
+        {
+            //appointment.PatientId 
+
+            if (ModelState.IsValid)
+            {
+                appointment.AppointmentId = _context.Appointments.Max(a => a.AppointmentId) + 1;
+                _context.Add(appointment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(appointment);
         }
 
         public IActionResult Privacy()
@@ -75,6 +91,11 @@ namespace Internship.Controllers
         public JsonResult GetAppointmentTimes()
         {
             return Json(_context.LuAppointmentTimes.ToList());
+        }
+
+        public JsonResult GetClinics()
+        {
+            return Json(_context.Clinics.ToList());
         }
     }
 }

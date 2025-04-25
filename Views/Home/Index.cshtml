@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Internship.Models.City>
+﻿@model Internship.Models.Appointment
 
 @{
     ViewBag.Title = "Form Tiếp Nhận";
@@ -21,6 +21,10 @@
                     <p>Đăng Ký Khám</p>
                 </div>
             </div>
+            <div class="d-flex justify-content-end align-items-center p-2">
+                <span class="me-2">Xin chào,</span>
+                <strong>@(User.Identity?.Name ?? "Người dùng")</strong>
+            </div>
         </header>
 
         <main id="main">
@@ -29,186 +33,43 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-12 mt-12 mt-lg-0 d-flex align-items-stretch">
-                                <form method="post" enctype="multipart/form-data" class="php-email-form">
+                                <form asp-action="RegisterAppointment" method="post" enctype="multipart/form-data" class="php-email-form">
                                     <div class="row">
                                         <div class="form-group col-md-3">
-                                            <label for="name">Mã Hồ Sơ (nếu có)</label>
-                                            <input id="MaHoSo" name="MaHoSo" type="text" class="form-control input-uppercase" placeholder="CH210000000" maxlength="11" />
+                                            <label >Mã Hồ Sơ (nếu có)</label>
+                                            <input id="MaHoSo" name="AppointmentId" type="text"
+                                                    class="form-control input-uppercase" placeholder="CH210000000" maxlength="11" required
+                                                    asp-for="AppointmentId"/>
                                         </div>
                                         <div class="form-group col-md-3">
-                                            <label for="name">Điện thoại <span class="text-danger">(*)</span></label>
-                                            <input id="DiDong" name="DiDong" type="tel" class="form-control" placeholder="098000000" pattern="^\+?(?:[0-9]??).{5,14}[0-9]$" required>
-                                            <div class="invalid-feedback">Vui lòng nhập đúng định dạng</div>
+                                            <label for="ClinicId">Phòng Khám</label>
+                                            <select id="selectClinic" name="ClinicId"
+                                                    class="form-select" data-window-padding="bottom"
+                                                    data-live-search="false" title="Vui lòng chọn" data-size="4"
+                                                    asp-for="ClinicId"></select>
                                         </div>
                                         <div class="form-group col-md-3">
-                                            <label for="name">Họ Tên <span class="text-danger">(*)</span></label>
-                                            <input id="HoTen" name="HoTen" type="text" class="form-control input-uppercase-first"
-                                                    placeholder="Nguyễn Văn A" maxlength="50" autocomplete="off" required 
-                                                    value="@User.Identity.Name"/>
-                                            <div class="invalid-feedback">Không được bỏ trống</div>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Ngày sinh <span class="text-danger">(*)</span></label>
-                                            <input autocomplete="off" id="NgaySinh" name="NgaySinh" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control" type="text" placeholder="Ngày/Tháng/Năm" required>
-                                            <div class="invalid-feedback">Vui lòng nhập đúng, VD: 30/12/2021</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Email <span class="text-danger">(*)</span></label>
-                                            <input id="Email" name="Email" type="email" class="form-control" placeholder="Nhập vào email" required>
-                                            <div class="invalid-feedback">Vui lòng nhập đúng định dạng</div>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Tỉnh/TP <span class="text-danger">(*)</span></label>
-                                            <select name="CityId" id="selCity" class="form-select" title="Vui lòng chọn"  required>
-                                                <option selected>Vui lòng chọn</option>
-                                                @foreach (var city in Model)
-                                                {
-                                                    <option value="@city.CityId">@city.Name</option>
-                                                }
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Quận/Huyện <span class="text-danger">(*)</span></label>
-                                            <select name="QuanHuyen" id="selDistrict" class="form-select" title="Vui lòng chọn" required>
-                                                <option value=""></option>
-                                            </select>
-                                            <script>
-                                                $(document).ready(function () {
-                                                    $('#selCity').on('change', function () {
-                                                        var cityId = $(this).val();
-                                                        $('#selDistrict').empty().append('<option>Đang tải...</option>');
-
-                                                        if (cityId) {
-                                                            $.getJSON('/Home/GetDistricts', { cityId: cityId }, function (data) {
-                                                                $('#selDistrict').empty().append('<option value="">Vui lòng chọn</option>');
-                                                                $.each(data, function (i, district) {
-                                                                    $('#selDistrict').append($('<option>', {
-                                                                        value: district.districtId,
-                                                                        text: district.name
-                                                                    }));
-                                                                }); 
-                                                            });
-                                                        } else {
-                                                            $('#selDistrict').empty().append('<option value="">Vui lòng chọn</option>');
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Phường/Xã <span class="text-danger">(*)</span></label>
-                                            <select name="PhuongXa" id="selWard" class="form-select" title="Vui lòng chọn" required>
-                                                <option value=""></option>
-                                            </select>
-                                            <script>
-                                                $(document).ready(function() {
-                                                    $('#selDistrict').on('change', function() {
-                                                        var districtId = $(this).val();
-                                                        $('#selWard').empty().append('<option>Đang tải...</option>');
-
-                                                        if (districtId) {
-                                                            $.getJSON('/Home/GetWards', { districtId: districtId }, function(data) {
-                                                                $('selWard').empty().append('<option value="">Vui lòng chọn</option>');
-                                                                $.each(data, function(i, ward) {
-                                                                    $('#selWard').append($('<option>', {
-                                                                        value: ward.wardId,
-                                                                        text: ward.name
-                                                                    }));
-                                                                });
-                                                            });
-                                                        } else {
-                                                            $('#selWard').empty().append('<option value="">Vui lòng chọn</option>');
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Số nhà/Đường <span class="text-danger">(*)</span></label>
-                                            <input id="DiaChi" name="DiaChi" type="text" class="form-control" placeholder="929 Trần Hưng Đạo ..." maxlength="200" required />
-                                            <div class="invalid-feedback">Không được bỏ trống</div>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Giới tính <span class="text-danger">(*)</span></label>
-                                            <select id="selGioiTinh" name="GioiTinh" class="form-select" title="Vui lòng chọn">
-                                                <option value="1" selected>Nam</option>
-                                                <option value="0">Nữ</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Ngày Khám <span class="text-danger">(*)</span></label>
-                                            <input onchange="checkNgayKham(this.value)" value="" name="NgayKham" class="form-control date-current" type="date" min="2025-04-04" id="iptNgayKham" required>
-                                            <div class="invalid-feedback">Ngày khám bắt đầu từ ngày hiện tại</div>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Phòng Khám</label>
-                                            <input id="ipPhongKham" data-toggle="modal" data-target="#mdPhongKham" type="text" class="form-control" placeholder="Chọn Phòng Khám" maxlength="200" style="cursor: pointer; background-color: #FFF;" readonly />
-                                            <input id="ipPhongKhamHide" name="PhongKham" type="hidden" />
-                                        </div>
-                                    </div>
-                                    
-                                    <a data-bs-toggle="collapse" class="d-block mb-2" href="#avd-form" role="button" id="extendElement">
-                                        Thêm thông tin <i class="icofont-simple-down"></i>
-                                    </a>
-                                    <div id="avd-form" class="collapse">
-                                        <div class="row">
-                                            <div class="form-group col-md-3">
-                                                <label for="name">Quốc tịch</label>
-                                                <select name="QuocTich" id="selNationality" class="form-select" title="Vui lòng chọn" data-size="8"></select>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="name">Dân tộc</label>
-                                                <select name="DanToc" id="selEthnicity" class="form-select" title="Vui lòng chọn" data-size="8"></select>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="name">Nghề nghiệp</label>
-                                                <select name="NgheNghiep" id="selProfession" class="form-select" title="Vui lòng chọn" data-size="8"></select>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <label for="name">Giờ Khám</label>
-                                                <select name="GioKham" class="form-select" data-window-padding="bottom" id="selAppointmentTime" data-live-search="false" title="Vui lòng chọn" data-size="4"></select>
-                                            </div>
+                                            <label for="AppointmentTime">Giờ Khám</label>
+                                            <select id="selectAppointmentTime" name="AppointmentTime"
+                                                    class="form-select" data-window-padding="bottom"
+                                                    data-live-search="false" title="Vui lòng chọn" data-size="4"
+                                                    asp-for="AppointmentTime"></select>
                                         </div>
                                         <script>
                                             $(document).ready(function() {
-                                                $.getJSON('/Home/GetNationalities', {}, function(data) {
-                                                    $('selNationality').empty().append('<option value="">Vui lòng chọn</option>');
-                                                    $.each(data, function(i, nationality) {
-                                                        $('#selNationality').append($('<option>', {
-                                                            value: nationality.nationalityId,
-                                                            text: nationality.name
+                                                $.getJSON('/Home/GetClinics', {}, function(data) {
+                                                    $('selectClinc').empty().append('<option value="">Vui lòng chọn</option>');
+                                                    $.each(data, function(i, clinic) {
+                                                        $('#selectClinic').append($('<option>', {
+                                                            value: clinic.clinicId,
+                                                            text: clinic.name
                                                         }));
                                                     });
                                                 });
-                                                
-                                                $.getJSON('/Home/GetEthnicities', {}, function(data) {
-                                                    $('selEthnicity').empty().append('<option value="">Vui lòng chọn</option>');
-                                                    $.each(data, function(i, ethnicity) {
-                                                        $('#selEthnicity').append($('<option>', {
-                                                            value: ethnicity.ethnicityId,
-                                                            text: ethnicity.name
-                                                        }));
-                                                    });
-                                                });
-
-                                                $.getJSON('/Home/GetProfessions', {}, function(data) {
-                                                    $('selProfession').empty().append('<option value="">Vui lòng chọn</option>');
-                                                    $.each(data, function(i, profession) {
-                                                        $('#selProfession').append($('<option>', {
-                                                            value: profession.professionId,
-                                                            text: profession.name
-                                                        }));
-                                                    });
-                                                });
-
                                                 $.getJSON('/Home/GetAppointmentTimes', {}, function(data) {
-                                                    $('selAppointmentTime').empty().append('<option value="">Vui lòng chọn</option>');
+                                                    $('selectAppointmentTime').empty().append('<option value="">Vui lòng chọn</option>');
                                                     $.each(data, function(i, appointmentTime) {
-                                                        $('#selAppointmentTime').append($('<option>', {
+                                                        $('#selectAppointmentTime').append($('<option>', {
                                                             value: appointmentTime.appointmentTime,
                                                             text: appointmentTime.appointmentTime + ':00'
                                                         }));
@@ -218,7 +79,7 @@
                                         </script>
                                     </div>
                                     <div class="text-center d-flex align-content-center justify-content-center flex-wrap">
-                                        <button type="submit" id="submitTN" class="m-1">Hoàn thành</button>
+                                        <button type="submit" id="submit" class="m-1">Hoàn thành</button>
                                         <button type="button" class="btn btn-secondary btnCancel m-1" id="btnCancel">Làm mới</button>
                                     </div>
                                 </form>
