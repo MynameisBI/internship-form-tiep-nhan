@@ -42,7 +42,8 @@ namespace Internship.Controllers
         {
             if (ModelState.IsValid)
             {
-                patient.PatientId = (_context.Patients.Any() ? _context.Patients.Max(p => p.PatientId) : 0) + 1;
+                //patient.PatientId = (_context.Patients.Any() ? _context.Patients.Max(p => p.PatientId) : 0) + 1;
+                patient.PatientId = 1;
                 _context.Add(patient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

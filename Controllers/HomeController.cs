@@ -21,8 +21,6 @@ namespace Internship.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            //var cities = _context.Cities.ToList();
-            //ViewBag.Cities = new SelectList(cities, "CityId", "Name");
             return View();
         }
 
