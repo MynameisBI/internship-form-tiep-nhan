@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Internship.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,6 +18,7 @@ namespace Internship.Controllers
             _context = context;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             //var cities = _context.Cities.ToList();
@@ -26,6 +26,7 @@ namespace Internship.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Index([Bind("AppointmentId",
                 "ClinicId", "AppointmentTime")] Appointment appointment)
