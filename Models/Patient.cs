@@ -62,11 +62,11 @@ public partial class Patient
 
     [ForeignKey("CityId")]
     [InverseProperty("Patients")]
-    public virtual City City { get; set; }
+    public virtual City? City { get; set; }
 
     [ForeignKey("DistrictId")]
     [InverseProperty("Patients")]
-    public virtual District District { get; set; }
+    public virtual District? District { get; set; }
 
     [ForeignKey("EthnicityId")]
     [InverseProperty("Patients")]
