@@ -22,6 +22,9 @@ public partial class Appointment
     [Column("clinic_id")]
     public int ClinicId { get; set; }
 
+    [Column("is_done")]
+    public bool? IsDone { get; set; }
+
     [ForeignKey("AppointmentTime")]
     [InverseProperty("Appointments")]
     public virtual LuAppointmentTime? AppointmentTimeNavigation { get; set; }

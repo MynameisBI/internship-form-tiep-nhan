@@ -1,0 +1,41 @@
+﻿@model List<Internship.Models.Appointment>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Index</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>AppointmentId</th>
+            <th>PatientId</th>
+            <th>AppointmentTime</th>
+            <th>ClinicId</th>
+            <th>IsDone</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.AppointmentId</td>
+                <td>@appointment.PatientId</td>
+				<td>@appointment.AppointmentTime</td>
+				<td>@appointment.ClinicId</td>
+                <td>
+                    <form asp-action="UpdateIsDone" method="post">
+                        <input type="hidden" name="AppointmentId" value="@appointment.AppointmentId" />
+                        <input type="checkbox" name="IsDone" value="true" @(appointment.IsDone == true ? "checked" : "") onchange="this.form.submit()" />
+                    </form>
+                </td>
+                @* <td> *@
+                @*     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> *@
+                @*     <a asp-action="delete" asp-route-id="@item.Id">delete</a> *@
+                @* </td> *@
+            </tr>
+        }
+
+    </tbody>
+
+</table>
